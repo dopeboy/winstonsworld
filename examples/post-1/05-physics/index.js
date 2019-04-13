@@ -45,6 +45,7 @@ var schoolScene = {
       this.load.image("greenApple", "../assets/images/greenApple.png");
       this.load.image("kitchenTable", "../assets/images/kitchenTable.png");
       this.load.image("microwave", "../assets/images/microwave.png");
+      this.load.image("sink", "../assets/images/sink.png");
 
       this.load.audio('welcome', '../assets/audio/welcome.m4a')
     },
@@ -80,23 +81,33 @@ var schoolScene = {
           player = this.physics.add
             .sprite(spawnPoint.x, spawnPoint.y, "atlas", "misa-front")
             .setSize(30, 40)
-            .setOffset(0, 24);
+            .setOffset(0, 24)
+            .setDepth(40); // on top of the table!
 
           fridge = this.physics.add
             .sprite(spawnPoint.x - 100, spawnPoint.y - 200, "fridge")
             .setSize(30, 40)
             .setOffset(0, 24)
             .setImmovable(true);
+
+          kitchenTable = this.physics.add
+            .sprite(spawnPoint.x + 50, spawnPoint.y - 110, "kitchenTable")
+            .setSize(30, 40)
+            .setOffset(0, 24)
+            .setImmovable(true);
+
           redApple = this.physics.add
-            .sprite(spawnPoint.x - 80, spawnPoint.y - 120, "redApple")
+            .sprite(spawnPoint.x - 30, spawnPoint.y - 110, "redApple")
             .setSize(30, 40)
             .setOffset(0, 24)
-            .setImmovable(true);
+            .setImmovable(true)
+            .setDepth(30);
           greenApple = this.physics.add
-            .sprite(spawnPoint.x + 120, spawnPoint.y - 120, "greenApple")
+            .sprite(spawnPoint.x + 80, spawnPoint.y - 130, "greenApple")
             .setSize(30, 40)
             .setOffset(0, 24)
-            .setImmovable(true);
+            .setImmovable(true)
+            .setDepth(30);
           this.physics.add.collider(redApple, player, () => {
             player.targetX = player.targetY = null; // avoid sound buzzing when continually ramming the target
             redApple.disableBody(true, false);
@@ -107,18 +118,17 @@ var schoolScene = {
             greenApple.disableBody(true, false);
             greenAudio.play();
           });
-
-          kitchenTable = this.physics.add
-            .sprite(spawnPoint.x, spawnPoint.y - 200, "kitchenTable")
-            .setSize(30, 40)
-            .setOffset(0, 24)
-            .setImmovable(true)
-            .setVisible(false); // todo :)
           microwave = this.physics.add
             .sprite(spawnPoint.x + 100, spawnPoint.y - 200, "microwave")
             .setSize(30, 40)
             .setOffset(0, 24)
             .setImmovable(true);
+          sink = this.physics.add
+            .sprite(spawnPoint.x + 150, spawnPoint.y - 200, "sink")
+            .setSize(30, 40)
+            .setOffset(0, 24)
+            .setImmovable(true);
+
 
           // Watch the player and worldLayer for collisions, for the duration of the scene:
           //this.physics.add.collider(player, worldLayer, boo);
@@ -188,7 +198,7 @@ let cursors;
 let player;
 let graphics, dialogText, clearButton;
 let redAudio, greenAudio;
-let npc, npc2, npc3, fridge, redApple, greenApple, kitchenTable, microwave;
+let npc, npc2, npc3, fridge, redApple, greenApple, kitchenTable, microwave, sink;
 let showDebug = false;
 let inSchool = false;
 
