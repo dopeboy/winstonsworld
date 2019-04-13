@@ -154,6 +154,11 @@ function create() {
       faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
     });
   });
+
+  this.input.on('pointerdown', function(pointer){
+    player.targetX = pointer.x + this.cameras.main.worldView.x;
+    player.targetY = pointer.y + this.cameras.main.worldView.y;
+  });
 }
 
 function update(time, delta) {
@@ -163,31 +168,48 @@ function update(time, delta) {
   // Stop any previous movement from the last frame
   player.body.setVelocity(0);
 
+  if (cursors.left.isDown || cursors.right.isDown || cursors.up.isDown || cursors.down.isDown) {
+    player.targetX = null;
+    player.targetY = null;
+  }
+  const epsilon = 5;
+  if (player.targetX !== null && Math.abs(player.targetX - player.body.position.x) < epsilon) {
+    player.targetX = null;
+  }
+  if (player.targetY !== null && Math.abs(player.targetY - player.body.position.y) < epsilon) {
+    player.targetY = null;
+  }
+
+  let walkLeft = false, walkRight = false, walkDown = false, walkUp = false;
   // Horizontal movement
-  if (cursors.left.isDown) {
+  if (cursors.left.isDown || (player.targetX !== null && player.targetX < player.body.position.x)) {
     player.body.setVelocityX(-speed);
-  } else if (cursors.right.isDown) {
+    walkLeft = true;
+  } else if (cursors.right.isDown || (player.targetX !== null && player.targetX > player.body.position.x)) {
     player.body.setVelocityX(speed);
+    walkRight = true;
   }
 
   // Vertical movement
-  if (cursors.up.isDown) {
+  if (cursors.up.isDown || (player.targetY !== null && player.targetY < player.body.position.y)) {
     player.body.setVelocityY(-speed);
-  } else if (cursors.down.isDown) {
+    walkUp = true;
+  } else if (cursors.down.isDown || (player.targetY !== null && player.targetY > player.body.position.y)) {
     player.body.setVelocityY(speed);
+    walkDown = true;
   }
 
   // Normalize and scale the velocity so that player can't move faster along a diagonal
   player.body.velocity.normalize().scale(speed);
 
   // Update the animation last and give left/right animations precedence over up/down animations
-  if (cursors.left.isDown) {
+  if (walkLeft) {
     player.anims.play("misa-left-walk", true);
-  } else if (cursors.right.isDown) {
+  } else if (walkRight) {
     player.anims.play("misa-right-walk", true);
-  } else if (cursors.up.isDown) {
+  } else if (walkUp) {
     player.anims.play("misa-back-walk", true);
-  } else if (cursors.down.isDown) {
+  } else if (walkDown) {
     player.anims.play("misa-front-walk", true);
   } else {
     player.anims.stop();
