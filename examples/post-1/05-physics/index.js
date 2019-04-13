@@ -42,7 +42,6 @@ function preload() {
 
 function create() {
   const map = this.make.tilemap({ key: "map" });
-  // game.input.add(onTap, this);
 
   // Parameters are the name you gave the tileset in Tiled and then the key of the tileset image in
   // Phaser's cache (i.e. the name you used in preload)
@@ -128,20 +127,6 @@ function create() {
 
   cursors = this.input.keyboard.createCursorKeys();
 
-  // Captures pointer/touch event.
-  this.input.on("pointerdown", function(touchDown) {
-    console.log("tap down is happening", touchDown);
-  });
-
-  this.input.on("pointerup", function(touchUp) {
-    console.log("tap up");
-    let touchX = touchUp.x;
-    let touchY = touchUp.y;
-    console.log(touchX, touchY);
-    player.newX = touchX;
-    player.newY = touchY;
-  });
-
   // Help text that has a "fixed" position on the screen
   this.add
     .text(16, 16, 'Arrow keys to move\nPress "D" to show hitboxes', {
@@ -169,6 +154,11 @@ function create() {
       faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
     });
   });
+
+  this.input.on("pointerdown", function(pointer) {
+    player.targetX = pointer.x + this.cameras.main.worldView.x;
+    player.targetY = pointer.y + this.cameras.main.worldView.y;
+  });
 }
 
 function update(time, delta) {
@@ -178,38 +168,57 @@ function update(time, delta) {
   // Stop any previous movement from the last frame
   player.body.setVelocity(0);
 
-  // Move Player to new X,Y
-  if (player.newX && player.newY) {
-    console.log("player has new x and y values", player.newX, player.newY);
-    // move player to new x, y
-    Object.assign(player, { x: player.newX, y: player.newY });
+  if (cursors.left.isDown || cursors.right.isDown || cursors.up.isDown || cursors.down.isDown) {
+    player.targetX = null;
+    player.targetY = null;
+  }
+  const epsilon = 5;
+  if (player.targetX !== null && Math.abs(player.targetX - player.body.position.x) < epsilon) {
+    player.targetX = null;
+  }
+  if (player.targetY !== null && Math.abs(player.targetY - player.body.position.y) < epsilon) {
+    player.targetY = null;
   }
 
+  let walkLeft = false,
+    walkRight = false,
+    walkDown = false,
+    walkUp = false;
   // Horizontal movement
-  if (cursors.left.isDown) {
+  if (cursors.left.isDown || (player.targetX !== null && player.targetX < player.body.position.x)) {
     player.body.setVelocityX(-speed);
-  } else if (cursors.right.isDown) {
+    walkLeft = true;
+  } else if (
+    cursors.right.isDown ||
+    (player.targetX !== null && player.targetX > player.body.position.x)
+  ) {
     player.body.setVelocityX(speed);
+    walkRight = true;
   }
 
   // Vertical movement
-  if (cursors.up.isDown) {
+  if (cursors.up.isDown || (player.targetY !== null && player.targetY < player.body.position.y)) {
     player.body.setVelocityY(-speed);
-  } else if (cursors.down.isDown) {
+    walkUp = true;
+  } else if (
+    cursors.down.isDown ||
+    (player.targetY !== null && player.targetY > player.body.position.y)
+  ) {
     player.body.setVelocityY(speed);
+    walkDown = true;
   }
 
   // Normalize and scale the velocity so that player can't move faster along a diagonal
   player.body.velocity.normalize().scale(speed);
 
   // Update the animation last and give left/right animations precedence over up/down animations
-  if (cursors.left.isDown) {
+  if (walkLeft) {
     player.anims.play("misa-left-walk", true);
-  } else if (cursors.right.isDown) {
+  } else if (walkRight) {
     player.anims.play("misa-right-walk", true);
-  } else if (cursors.up.isDown) {
+  } else if (walkUp) {
     player.anims.play("misa-back-walk", true);
-  } else if (cursors.down.isDown) {
+  } else if (walkDown) {
     player.anims.play("misa-front-walk", true);
   } else {
     player.anims.stop();
