@@ -83,17 +83,26 @@ var schoolScene = {
           fridge = this.physics.add
             .sprite(spawnPoint.x - 100, spawnPoint.y - 200, "fridge")
             .setSize(30, 40)
-            .setOffset(0, 24);
+            .setOffset(0, 24)
+            .setImmovable(true);
           redApple = this.physics.add
-            .sprite(spawnPoint.x - 50, spawnPoint.y - 100, "redApple")
+            .sprite(spawnPoint.x - 80, spawnPoint.y - 120, "redApple")
             .setSize(30, 40)
-            .setOffset(0, 24);
+            .setOffset(0, 24)
+            .setImmovable(true);
           greenApple = this.physics.add
-            .sprite(spawnPoint.x + 50, spawnPoint.y - 100, "greenApple")
+            .sprite(spawnPoint.x + 120, spawnPoint.y - 120, "greenApple")
             .setSize(30, 40)
-            .setOffset(0, 24);
-
-
+            .setOffset(0, 24)
+            .setImmovable(true);
+          this.physics.add.collider(redApple, player, () => {
+            player.targetX = player.targetY = null; // avoid sound buzzing when continually ramming the target
+            redAudio.play();
+          });
+          this.physics.add.collider(greenApple, player, () => {
+            player.targetX = player.targetY = null;
+            greenAudio.play();
+          });
 
           // Watch the player and worldLayer for collisions, for the duration of the scene:
           //this.physics.add.collider(player, worldLayer, boo);
@@ -308,16 +317,6 @@ function create() {
   this.physics.add.collider(npc, worldLayer);
   this.physics.add.collider(npc, player, () => {
     dialogText.setVisible(true); clearButton.setVisible(true); graphics.setVisible(true);
-  });
-
-  this.physics.add.collider(npc2, player, () => {
-    player.targetX = player.targetY = null; // avoid sound buzzing when continually ramming the target
-    redAudio.play();
-  });
-
-  this.physics.add.collider(npc3, player, () => {
-    player.targetX = player.targetY = null;
-    greenAudio.play();
   });
 
   // Create the player's walking animations from the texture atlas. These are stored in the global
