@@ -26,6 +26,8 @@ const config = {
 const game = new Phaser.Game(config);
 let cursors;
 let player;
+let graphics, dialogText, clearButton;
+let npc;
 let showDebug = false;
 
 function preload() {
@@ -72,6 +74,53 @@ function create() {
 
   // Watch the player and worldLayer for collisions, for the duration of the scene:
   this.physics.add.collider(player, worldLayer);
+
+  var rect = new Phaser.Geom.Rectangle(100, 100, 700, 400);
+  graphics = this.add.graphics({ fillStyle: { color: 0x888888 } });
+  graphics.fillRectShape(rect);
+  graphics.setInteractive(rect, () => { console.log('dialog mouseover'); });
+  graphics.setScrollFactor(0)
+    .setDepth(30);
+  graphics.setVisible(false);
+
+  dialogText = this.add
+    .text(200, 200, 'Hello! Here is a dialog popup. You are in the cellar. Obvious exits are north, south, and dennis.', {
+      font: "18px monospace",
+      fill: "#000000",
+      padding: { x: 20, y: 10 },
+      backgroundColor: "#ffffff",
+      wordWrap: {
+        width: 300
+      }
+    });
+  dialogText
+    .setScrollFactor(0)
+    .setDepth(30)
+    .setVisible(false);
+
+  clearButton = this.add
+    .text(300, 400, 'Press button to clear dialog / take action!', {
+      font: '18px monospace',
+      fill: 'white',
+      padding: { x: 10, y: 10 },
+      backgroundColor: 'green',
+      wordWrap: {
+        width: 200
+      }
+    });
+  clearButton
+    .setScrollFactor(0)
+    .setDepth(30)
+    .setVisible(false);
+
+  npc = this.physics.add
+    .sprite(spawnPoint.x + 100, spawnPoint.y - 150, "atlas", "misa-front")
+    .setSize(30, 40)
+    .setOffset(0, 24);
+
+  this.physics.add.collider(npc, worldLayer);
+  this.physics.add.collider(npc, player, () => { dialogText.setVisible(true); clearButton.setVisible(true); graphics.setVisible(true); });
+  npc.setImmovable(true);
 
   // Create the player's walking animations from the texture atlas. These are stored in the global
   // animation manager so any sprite can access them.
@@ -156,6 +205,18 @@ function create() {
   });
 
   this.input.on('pointerdown', function(pointer){
+    const x = pointer.x;
+    const y = pointer.y;
+    if (graphics.visible) {
+      if (x > 300 && y > 400 && x < 450 && y < 500) {
+        graphics.setVisible(false);
+        dialogText.setVisible(false);
+        clearButton.setVisible(false);
+        player.targetX = player.targetY = null;
+      }
+      return;
+    }
+
     player.targetX = pointer.x + this.cameras.main.worldView.x;
     player.targetY = pointer.y + this.cameras.main.worldView.y;
   });
@@ -168,6 +229,9 @@ function update(time, delta) {
   // Stop any previous movement from the last frame
   player.body.setVelocity(0);
 
+  if (graphics.visible) {
+    return;
+  }
   if (cursors.left.isDown || cursors.right.isDown || cursors.up.isDown || cursors.down.isDown) {
     player.targetX = null;
     player.targetY = null;
