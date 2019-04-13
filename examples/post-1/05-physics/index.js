@@ -27,7 +27,8 @@ const game = new Phaser.Game(config);
 let cursors;
 let player;
 let graphics, dialogText, clearButton;
-let npc;
+let kitchenAudio, redAudio, greenAudio;
+let npc, npc2, npc3;
 let showDebug = false;
 
 function preload() {
@@ -40,6 +41,16 @@ function preload() {
   // If you don't use an atlas, you can do the same thing with a spritesheet, see:
   //  https://labs.phaser.io/view.html?src=src/animation/single%20sprite%20sheet.js
   this.load.atlas("atlas", "../assets/atlas/atlas.png", "../assets/atlas/atlas.json");
+
+  this.load.audio('inkitchen',
+    '../assets/audio/inkitchen.m4a'
+  );
+  this.load.audio('redapple',
+    '../assets/audio/redapple.m4a'
+  );
+  this.load.audio('greenapple',
+    '../assets/audio/greenapple.m4a'
+  );
 }
 
 function create() {
@@ -113,14 +124,44 @@ function create() {
     .setDepth(30)
     .setVisible(false);
 
+		if (this.sound.context.state === 'suspended') {
+			this.sound.context.resume();
+		}
+  kitchenAudio = this.sound.add('inkitchen');
+  redAudio = this.sound.add('redapple');
+  greenAudio = this.sound.add('greenapple');
+
   npc = this.physics.add
-    .sprite(spawnPoint.x + 100, spawnPoint.y - 150, "atlas", "misa-front")
+    .sprite(spawnPoint.x - 100, spawnPoint.y - 250, "atlas", "misa-front")
     .setSize(30, 40)
-    .setOffset(0, 24);
+    .setOffset(0, 24)
+    .setImmovable(true);
+
+  npc2 = this.physics.add
+    .sprite(spawnPoint.x - 120, spawnPoint.y + 30, "atlas", "misa-front")
+    .setSize(30, 40)
+    .setOffset(0, 24)
+    .setImmovable(true);
+
+  npc3 = this.physics.add
+    .sprite(spawnPoint.x + 120, spawnPoint.y + 30, "atlas", "misa-front")
+    .setSize(30, 40)
+    .setOffset(0, 24)
+    .setImmovable(true);
 
   this.physics.add.collider(npc, worldLayer);
-  this.physics.add.collider(npc, player, () => { dialogText.setVisible(true); clearButton.setVisible(true); graphics.setVisible(true); });
-  npc.setImmovable(true);
+  this.physics.add.collider(npc, player, () => {
+    dialogText.setVisible(true); clearButton.setVisible(true); graphics.setVisible(true);
+    kitchenAudio.play();
+  });
+
+  this.physics.add.collider(npc2, player, () => {
+    redAudio.play();
+  });
+
+  this.physics.add.collider(npc3, player, () => {
+    greenAudio.play();
+  });
 
   // Create the player's walking animations from the texture atlas. These are stored in the global
   // animation manager so any sprite can access them.
