@@ -43,6 +43,8 @@ var schoolScene = {
       this.load.image("fridge", "../assets/images/fridge.png");
       this.load.image("redApple", "../assets/images/redApple.png");
       this.load.image("greenApple", "../assets/images/greenApple.png");
+      this.load.image("kitchenTable", "../assets/images/kitchenTable.png");
+      this.load.image("microwave", "../assets/images/microwave.png");
 
       this.load.audio('welcome', '../assets/audio/welcome.m4a')
     },
@@ -105,6 +107,18 @@ var schoolScene = {
             greenApple.disableBody(true, false);
             greenAudio.play();
           });
+
+          kitchenTable = this.physics.add
+            .sprite(spawnPoint.x, spawnPoint.y - 200, "kitchenTable")
+            .setSize(30, 40)
+            .setOffset(0, 24)
+            .setImmovable(true)
+            .setVisible(false); // todo :)
+          microwave = this.physics.add
+            .sprite(spawnPoint.x + 100, spawnPoint.y - 200, "microwave")
+            .setSize(30, 40)
+            .setOffset(0, 24)
+            .setImmovable(true);
 
           // Watch the player and worldLayer for collisions, for the duration of the scene:
           //this.physics.add.collider(player, worldLayer, boo);
@@ -174,7 +188,7 @@ let cursors;
 let player;
 let graphics, dialogText, clearButton;
 let redAudio, greenAudio;
-let npc, npc2, npc3, fridge, redApple, greenApple;
+let npc, npc2, npc3, fridge, redApple, greenApple, kitchenTable, microwave;
 let showDebug = false;
 let inSchool = false;
 
