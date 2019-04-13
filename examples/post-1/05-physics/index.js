@@ -42,6 +42,7 @@ function preload() {
 
 function create() {
   const map = this.make.tilemap({ key: "map" });
+  // game.input.add(onTap, this);
 
   // Parameters are the name you gave the tileset in Tiled and then the key of the tileset image in
   // Phaser's cache (i.e. the name you used in preload)
@@ -127,6 +128,20 @@ function create() {
 
   cursors = this.input.keyboard.createCursorKeys();
 
+  // Captures pointer/touch event.
+  this.input.on("pointerdown", function(touchDown) {
+    console.log("tap down is happening", touchDown);
+  });
+
+  this.input.on("pointerup", function(touchUp) {
+    console.log("tap up");
+    let touchX = touchUp.x;
+    let touchY = touchUp.y;
+    console.log(touchX, touchY);
+    player.newX = touchX;
+    player.newY = touchY;
+  });
+
   // Help text that has a "fixed" position on the screen
   this.add
     .text(16, 16, 'Arrow keys to move\nPress "D" to show hitboxes', {
@@ -162,6 +177,13 @@ function update(time, delta) {
 
   // Stop any previous movement from the last frame
   player.body.setVelocity(0);
+
+  // Move Player to new X,Y
+  if (player.newX && player.newY) {
+    console.log("player has new x and y values", player.newX, player.newY);
+    // move player to new x, y
+    Object.assign(player, { x: player.newX, y: player.newY });
+  }
 
   // Horizontal movement
   if (cursors.left.isDown) {
