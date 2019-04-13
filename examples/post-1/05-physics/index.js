@@ -97,10 +97,12 @@ var schoolScene = {
             .setImmovable(true);
           this.physics.add.collider(redApple, player, () => {
             player.targetX = player.targetY = null; // avoid sound buzzing when continually ramming the target
+            redApple.disableBody(true, false);
             redAudio.play();
           });
           this.physics.add.collider(greenApple, player, () => {
             player.targetX = player.targetY = null;
+            greenApple.disableBody(true, false);
             greenAudio.play();
           });
 
