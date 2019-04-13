@@ -26,11 +26,14 @@ const config = {
 const game = new Phaser.Game(config);
 let cursors;
 let player;
-let showDebug = false;
+let showDebug = true;
 
 function preload() {
   this.load.image("tiles", "../assets/tilesets/tuxmon-sample-32px-extruded.png");
   this.load.tilemapTiledJSON("map", "../assets/tilemaps/tuxemon-town.json");
+
+  this.load.image("appleTiles", "../assets/tilesets/appleTreePiskel.png");
+  this.load.tilemapTiledJSON("appleMap", "../assets/tilemaps/appleTreeScene.json");
 
   // An atlas is a way to pack multiple images together into one texture. I'm using it to load all
   // the player animations (walking left, walking right, etc.) in one image. For more info see:
@@ -42,17 +45,22 @@ function preload() {
 
 function create() {
   const map = this.make.tilemap({ key: "map" });
+  const appleMap = this.make.tilemap({ key: "appleMap" });
 
   // Parameters are the name you gave the tileset in Tiled and then the key of the tileset image in
   // Phaser's cache (i.e. the name you used in preload)
   const tileset = map.addTilesetImage("tuxmon-sample-32px-extruded", "tiles");
+  const appleTileset = map.addTilesetImage("appleTreePiskel", "appleTiles");
 
   // Parameters: layer name (or index) from Tiled, tileset, x, y
   const belowLayer = map.createStaticLayer("Below Player", tileset, 0, 0);
   const worldLayer = map.createStaticLayer("World", tileset, 0, 0);
   const aboveLayer = map.createStaticLayer("Above Player", tileset, 0, 0);
 
+  const appleWorldLayer = map.createStaticLayer("appleWorld", appleTileset, 0, 0);
+
   worldLayer.setCollisionByProperty({ collides: true });
+  appleWorldLayer.setCollisionByProperty({ collides: true });
 
   // By default, everything gets depth sorted on the screen in the order we created things. Here, we
   // want the "Above Player" layer to sit on top of the player, so we explicitly give it a depth.
