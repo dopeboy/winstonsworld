@@ -38,9 +38,15 @@ var schoolScene = {
       // If you don't use an atlas, you can do the same thing with a spritesheet, see:
       //  https://labs.phaser.io/view.html?src=src/animation/single%20sprite%20sheet.js
       this.load.atlas("atlas", "../assets/atlas/atlas.png", "../assets/atlas/atlas.json");
-      this.load.audio('welcome', '../assets/audio/welcome.m4a')
 
+      // An lone image is the way to do... not the above
+      this.load.image("fridge", "../assets/images/fridge.png");
+      this.load.image("redApple", "../assets/images/redApple.png");
+      this.load.image("greenApple", "../assets/images/greenApple.png");
+
+      this.load.audio('welcome', '../assets/audio/welcome.m4a')
     },
+
     create: function() {
             let x = this.sound.add('welcome', 0.5, true, true)
             x.play();
@@ -73,6 +79,21 @@ var schoolScene = {
             .sprite(spawnPoint.x, spawnPoint.y, "atlas", "misa-front")
             .setSize(30, 40)
             .setOffset(0, 24);
+
+          fridge = this.physics.add
+            .sprite(spawnPoint.x - 100, spawnPoint.y - 200, "fridge")
+            .setSize(30, 40)
+            .setOffset(0, 24);
+          redApple = this.physics.add
+            .sprite(spawnPoint.x - 50, spawnPoint.y - 100, "redApple")
+            .setSize(30, 40)
+            .setOffset(0, 24);
+          greenApple = this.physics.add
+            .sprite(spawnPoint.x + 50, spawnPoint.y - 100, "greenApple")
+            .setSize(30, 40)
+            .setOffset(0, 24);
+
+
 
           // Watch the player and worldLayer for collisions, for the duration of the scene:
           //this.physics.add.collider(player, worldLayer, boo);
@@ -142,7 +163,7 @@ let cursors;
 let player;
 let graphics, dialogText, clearButton;
 let redAudio, greenAudio;
-let npc, npc2, npc3;
+let npc, npc2, npc3, fridge, redApple, greenApple;
 let showDebug = false;
 let inSchool = false;
 
