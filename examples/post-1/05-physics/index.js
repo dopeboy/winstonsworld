@@ -156,10 +156,12 @@ function create() {
   });
 
   this.physics.add.collider(npc2, player, () => {
+    player.targetX = player.targetY = null; // avoid sound buzzing when continually ramming the target
     redAudio.play();
   });
 
   this.physics.add.collider(npc3, player, () => {
+    player.targetX = player.targetY = null;
     greenAudio.play();
   });
 
