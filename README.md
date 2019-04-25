@@ -22,5 +22,5 @@ Then navigate to `http://localhost:3000/post-1/05-physics/index.html`
 
 ## Acknowledgements
 
-* Michael Hadley for his awesome [guide](https://medium.com/@michaelwesthadley/modular-game-worlds-in-phaser-3-tilemaps-1-958fc7e6bbd6) and [code](https://github.com/mikewesthad/phaser-3-tilemap-blog-posts/tree/master/examples/post-1) we built on top of.
+* Michael Hadley (@mikewesthad) for his awesome [guide](https://medium.com/@michaelwesthadley/modular-game-worlds-in-phaser-3-tilemaps-1-958fc7e6bbd6) and [code](https://github.com/mikewesthad/phaser-3-tilemap-blog-posts/tree/master/examples/post-1) we built on top of.
 
