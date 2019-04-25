@@ -1,30 +1,26 @@
-# Tilemaps in Phaser 3
+# Winston's World
 
-A tutorial series on the ways you can build modular game worlds using tilemaps in Phaser 3.
+This was a hackathon project at the [April 12th YC hackathon](https://blog.ycombinator.com/april-2019-hackathon-recap/). Out of ~30 groups, it made the top 10. It is a game for preschoolers to learn basic skills, starting with identifying colors.
 
-- Post #1 Static Maps: [link](https://medium.com/@michaelwesthadley/modular-game-worlds-in-phaser-3-tilemaps-1-958fc7e6bbd6)
-- Post #2 Dynamic Platformer: [link](https://medium.com/@michaelwesthadley/modular-game-worlds-in-phaser-3-tilemaps-2-dynamic-platformer-3d68e73d494a)
-- Post #3 Procedural Dungeon: [link](https://medium.com/@michaelwesthadley/modular-game-worlds-in-phaser-3-tilemaps-3-procedural-dungeon-3bc19b841cd)
-- Post #4 Meet Matter: [link](https://medium.com/@michaelwesthadley/modular-game-worlds-in-phaser-3-tilemaps-4-meet-matter-js-abf4dfa65ca1)
-- Post #5 Matter Physics Platformer: [link](https://medium.com/@michaelwesthadley/modular-game-worlds-in-phaser-3-tilemaps-5-matter-physics-platformer-d14d1f614557)
+![](https://i.imgur.com/astLXFq.png)
 
-## Running Examples Locally
-
-Looking to run the examples locally?
-Clone or download the repository. Make sure you have [node](https://nodejs.org/en/) installed. Open a terminal in the repository folder and run:
+## Run it
 
 ```
 npm install
-```
-
-This will install the needed dependencies. Then you can run:
-
-```
 npm run serve
 ```
 
-This will open up a browser with the examples served up.
+Then navigate to `http://localhost:3000/post-1/05-physics/index.html`
 
-## License & Attribution
+## Team
 
-See [licenses.md](./licenses.md) for the licenses & attributions for the various components of this repository - the game assets, the code examples and the blog posts themselves.
+* Manish Sinha
+* Rebecca Hitchcock
+* Zach Hitchcock
+* James Donald
+
+## Acknowledgements
+
+* Michael Hadley for his awesome [guide](https://medium.com/@michaelwesthadley/modular-game-worlds-in-phaser-3-tilemaps-1-958fc7e6bbd6) and [code](https://github.com/mikewesthad/phaser-3-tilemap-blog-posts/tree/master/examples/post-1) we built on top of.
+
